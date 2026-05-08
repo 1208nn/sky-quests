@@ -49,7 +49,8 @@
             border-radius: 20px;
             background: var(--card);
             box-shadow: var(--shadow);
-            overflow: visible; /* ensure inner shadows are visible */
+            overflow: visible;
+            counter-reset: step-counter;
         }
 
         .hero {
@@ -62,7 +63,28 @@
         .primary-step {
             display: grid;
             gap: 8px;
-            margin-bottom: 16px;
+            position: relative;
+            padding-left: 50px;
+            counter-increment: step-counter;
+            /* 将计数器移到容器层级 */
+        }
+
+        .primary-step::before {
+            /* 原先为连线，改为编号（与 .links::before 统一） */
+            content: counter(step-counter, decimal-leading-zero);
+            position: absolute;
+            top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 700;
+            z-index: 4;
         }
 
         .primary-step-link {
@@ -73,6 +95,20 @@
             background: linear-gradient(180deg, rgba(37, 99, 235, 0.06), rgba(255, 255, 255, 1));
             color: var(--text);
             text-decoration: none;
+            position: relative;
+        }
+
+        .primary-step::after {
+            /* 原先编号改为连线（与 .links::after 统一） */
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent), transparent);
+            opacity: 0.3;
+            z-index: 1;
         }
 
         .primary-step-note {
@@ -115,7 +151,39 @@
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 12px;
-            overflow: visible; /* allow child shadows to escape */
+            overflow: visible;
+            position: relative;
+            padding-left: 50px;
+            counter-increment: step-counter;
+        }
+
+        .links::before {
+            content: counter(step-counter, decimal-leading-zero);
+            position: absolute;
+            top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 700;
+            z-index: 3;
+        }
+
+        .links::after {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent), transparent);
+            opacity: 0.3;
+            z-index: 1;
         }
 
         a {
@@ -135,7 +203,8 @@
             transform: translateY(-1px);
             border-color: rgba(37, 99, 235, 0.24);
             box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
-            z-index: 50; /* raise above neighboring elements to avoid clipping */
+            z-index: 50;
+            /* raise above neighboring elements to avoid clipping */
             position: relative;
         }
 
@@ -229,18 +298,24 @@
                 border-radius: 18px;
             }
 
+            .primary-step {
+                padding-left: 45px;
+            }
+
             .primary-step-link {
                 padding: 16px;
             }
 
             .links {
                 grid-template-columns: 1fr;
+                padding-left: 45px;
             }
 
             a {
                 min-height: 84px;
             }
         }
+
         /* 折叠切换按钮与容器，风格与卡片统一 */
         #toggle-installs {
             position: relative;
@@ -256,12 +331,20 @@
             cursor: pointer;
             text-align: left;
         }
-        #toggle-installs:hover { transform: translateY(-1px); border-color: rgba(37, 99, 235, 0.24); box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08); z-index: 5; position: relative; }
+
+        #toggle-installs:hover {
+            transform: translateY(-1px);
+            border-color: rgba(37, 99, 235, 0.24);
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+            z-index: 5;
+            position: relative;
+        }
 
         #other-installs {
             grid-column: 1 / -1;
             margin-top: 12px;
-            overflow: visible; /* allow shadows to show */
+            overflow: visible;
+            /* allow shadows to show */
         }
 
         .other-inner {
@@ -274,11 +357,26 @@
             transition: max-height .32s ease, opacity .22s ease;
             opacity: 0;
         }
-        .other-inner.open { max-height: 800px; overflow: visible; opacity: 1; pointer-events: auto; }
-        .other-inner a { margin: 0; }
+
+        .other-inner.open {
+            max-height: 800px;
+            overflow: visible;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .other-inner a {
+            margin: 0;
+        }
+
         @media (max-width:720px) {
-            .other-inner { grid-template-columns: 1fr; }
-            #toggle-installs { width: 100%; }
+            .other-inner {
+                grid-template-columns: 1fr;
+            }
+
+            #toggle-installs {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -319,50 +417,53 @@
                 <!-- 其他方案：默认折叠 -->
                 <div id="other-installs" aria-hidden="true">
                     <div class="other-inner">
-                    <a href="https://open.scriptable.app/run/Installer?url=https%3A%2F%2Fsky-quests.shhy.in%2FSky%2520Quests.js">
-                        <span>
-                            <span class="card-title">使用 Installer 安装</span>
-                            <span class="card-desc">仅适用于 Installer 用户</span>
-                            <span class="card-meta">一键快捷安装</span>
-                        </span>
-                    </a>
+                        <a
+                            href="https://open.scriptable.app/run/Installer?url=https%3A%2F%2Fsky-quests.shhy.in%2FSky%2520Quests.js">
+                            <span>
+                                <span class="card-title">使用 Installer 安装</span>
+                                <span class="card-desc">仅适用于 Installer 用户</span>
+                                <span class="card-meta">一键快捷安装</span>
+                            </span>
+                        </a>
 
-                    <a href="Install Sky Quests Script.shortcut">
-                        <span>
-                            <span class="card-title">快捷指令安装器</span>
-                            <span class="card-desc">通过下载文件获取</span>
-                            <span class="card-meta">备用</span>
-                        </span>
-                    </a>
+                        <a href="Install Sky Quests Script.shortcut">
+                            <span>
+                                <span class="card-title">快捷指令安装器</span>
+                                <span class="card-desc">通过下载文件获取</span>
+                                <span class="card-meta">备用</span>
+                            </span>
+                        </a>
 
-                    <a href="Sky Quests.js">
-                        <span>
-                            <span class="card-title">获取源码</span>
-                            <span class="card-desc">源码下载</span>
-                            <span class="card-meta">手动安装</span>
-                        </span>
-                    </a>
+                        <a href="Sky Quests.js">
+                            <span>
+                                <span class="card-title">获取源码</span>
+                                <span class="card-desc">源码下载</span>
+                                <span class="card-meta">手动安装</span>
+                            </span>
+                        </a>
                     </div>
                 </div>
 
 
             </div>
 
-            <div class="footer">Community Project, not affiliated with thatgamecompany, thatskygame, 网易（杭州）网络有限公司 (NetEase (Hangzhou) Network Co., Ltd.), 那游科技服务（上海）有限公司 (Thatgamecompany China Services (Shanghai) Co., Ltd.), 上海那家回忆商贸有限公司.</div>
+            <div class="footer">Community Project, not affiliated with thatgamecompany, thatskygame, 网易（杭州）网络有限公司
+                (NetEase (Hangzhou) Network Co., Ltd.), 那游科技服务（上海）有限公司 (Thatgamecompany China Services (Shanghai) Co.,
+                Ltd.), 上海那家回忆商贸有限公司.</div>
         </section>
     </main>
     <script>
-        (function(){
+        (function () {
             var btn = document.getElementById('toggle-installs');
             var box = document.getElementById('other-installs');
-            if(!btn || !box) return;
+            if (!btn || !box) return;
             var title = btn.querySelector('.card-title');
             var inner = box.querySelector('.other-inner');
-            btn.addEventListener('click', function(){
+            btn.addEventListener('click', function () {
                 var open = inner.classList.toggle('open');
                 box.setAttribute('aria-hidden', open ? 'false' : 'true');
                 btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-                if(title) title.textContent = open ? '隐藏其他安装方式' : '显示其他安装方式';
+                if (title) title.textContent = open ? '隐藏其他安装方式' : '显示其他安装方式';
             });
         })();
     </script>
