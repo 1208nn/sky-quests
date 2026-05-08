@@ -66,11 +66,10 @@
             position: relative;
             padding-left: 50px;
             counter-increment: step-counter;
-            /* 将计数器移到容器层级 */
+            margin-bottom: 20px;
         }
 
         .primary-step::before {
-            /* 原先为连线，改为编号（与 .links::before 统一） */
             content: counter(step-counter, decimal-leading-zero);
             position: absolute;
             top: 0;
@@ -99,7 +98,6 @@
         }
 
         .primary-step::after {
-            /* 原先编号改为连线（与 .links::after 统一） */
             content: '';
             position: absolute;
             left: 15px;
@@ -204,7 +202,6 @@
             border-color: rgba(37, 99, 235, 0.24);
             box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
             z-index: 50;
-            /* raise above neighboring elements to avoid clipping */
             position: relative;
         }
 
@@ -267,7 +264,6 @@
                 background: linear-gradient(180deg, rgba(96, 165, 250, 0.14), rgba(255, 255, 255, 0.02));
             }
 
-            /* 深色模式：提高主步骤卡片的对比度与可读性 */
             .primary-step-link {
                 border-color: rgba(96, 165, 250, 0.28);
                 background: linear-gradient(180deg, rgba(96, 165, 250, 0.06), rgba(255, 255, 255, 0.01));
@@ -316,7 +312,6 @@
             }
         }
 
-        /* 折叠切换按钮与容器，风格与卡片统一 */
         #toggle-installs {
             position: relative;
             display: flex;
@@ -344,7 +339,6 @@
             grid-column: 1 / -1;
             margin-top: 12px;
             overflow: visible;
-            /* allow shadows to show */
         }
 
         .other-inner {
@@ -414,36 +408,32 @@
                     </span>
                 </button>
 
-                <!-- 其他方案：默认折叠 -->
-                <div id="other-installs" aria-hidden="true">
-                    <div class="other-inner">
-                        <a
-                            href="https://open.scriptable.app/run/Installer?url=https%3A%2F%2Fsky-quests.shhy.in%2FSky%2520Quests.js">
-                            <span>
-                                <span class="card-title">使用 Installer 安装</span>
-                                <span class="card-desc">仅适用于 Installer 用户</span>
-                                <span class="card-meta">一键快捷安装</span>
-                            </span>
-                        </a>
+                <div class="other-inner" id="other-installs" aria-hidden="true">
+                    <a
+                        href="https://open.scriptable.app/run/Installer?url=https%3A%2F%2Fsky-quests.shhy.in%2FSky%2520Quests.js">
+                        <span>
+                            <span class="card-title">使用 Installer 安装</span>
+                            <span class="card-desc">仅适用于 Installer 用户</span>
+                            <span class="card-meta">一键快捷安装</span>
+                        </span>
+                    </a>
 
-                        <a href="Install Sky Quests Script.shortcut">
-                            <span>
-                                <span class="card-title">快捷指令安装器</span>
-                                <span class="card-desc">通过下载文件获取</span>
-                                <span class="card-meta">备用</span>
-                            </span>
-                        </a>
+                    <a href="Install Sky Quests Script.shortcut">
+                        <span>
+                            <span class="card-title">快捷指令安装器</span>
+                            <span class="card-desc">通过下载文件获取</span>
+                            <span class="card-meta">备用</span>
+                        </span>
+                    </a>
 
-                        <a href="Sky Quests.js">
-                            <span>
-                                <span class="card-title">获取源码</span>
-                                <span class="card-desc">源码下载</span>
-                                <span class="card-meta">手动安装</span>
-                            </span>
-                        </a>
-                    </div>
+                    <a href="Sky Quests.js">
+                        <span>
+                            <span class="card-title">获取源码</span>
+                            <span class="card-desc">源码下载</span>
+                            <span class="card-meta">手动安装</span>
+                        </span>
+                    </a>
                 </div>
-
 
             </div>
 
@@ -458,9 +448,8 @@
             var box = document.getElementById('other-installs');
             if (!btn || !box) return;
             var title = btn.querySelector('.card-title');
-            var inner = box.querySelector('.other-inner');
             btn.addEventListener('click', function () {
-                var open = inner.classList.toggle('open');
+                var open = box.classList.toggle('open');
                 box.setAttribute('aria-hidden', open ? 'false' : 'true');
                 btn.setAttribute('aria-expanded', open ? 'true' : 'false');
                 if (title) title.textContent = open ? '隐藏其他安装方式' : '显示其他安装方式';
