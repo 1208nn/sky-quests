@@ -81,11 +81,7 @@ function getLADate() {
 }
 
 function getWidgetLanguage() {
-  const raw = (args.widgetParameter || "zh").trim().toLowerCase();
-  if (raw === "en" || raw === "english") return "en";
-  if (raw === "zh" || raw === "cn" || raw === "zh-cn" || raw === "chinese")
-    return "zh";
-  return raw || "zh";
+  return args.widgetParameter || Device.locale() || "zh";
 }
 
 function getCache(lang) {

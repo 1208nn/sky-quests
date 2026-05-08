@@ -1,7 +1,18 @@
 export default {
   async fetch(r, e) {
     const u = new URL(r.url);
-    const L = u.searchParams.get("lang") || "zh";
+    const M = {
+      CN: "zh",
+      TW: "zh",
+      HK: "zh",
+      US: "en",
+      GB: "en",
+      JP: "ja",
+      KR: "ko",
+      FR: "fr",
+      DE: "de",
+    };
+    const L = u.searchParams.get("lang") || M[r.cf?.country] || "zh";
     const k = "quests-" + L;
     const d = new Date()
       .toLocaleString("en-US", { timeZone: "America/Los_Angeles" })
