@@ -347,14 +347,6 @@
                 </button>
 
                 <div class="other-inner" id="other-installs" aria-hidden="true">
-                    <a href="scriptable:///run/Installer?url=https%3A%2F%2Fsky-quests.shhy.in%2FSky%2520Quests.js">
-                        <span>
-                            <span class="card-title">使用 Installer 安装</span>
-                            <span class="card-desc">仅适用于 Installer 用户，你必须已经安装 Installer 脚本</span>
-                            <span class="card-meta">Installer 用户</span>
-                        </span>
-                    </a>
-
                     <a href="Install Sky Quests Script.shortcut">
                         <span>
                             <span class="card-title">快捷指令安装器</span>
@@ -370,6 +362,15 @@
                             <span class="card-meta">手动安装</span>
                         </span>
                     </button>
+
+                    <a href="scriptable:///run/Installer?url=https%3A%2F%2Fsky-quests.shhy.in%2FSky%2520Quests.js"
+                        onclick="alert('如果未转跳，请先安装 Scriptable\n如果转跳后无反应，请确认您有脚本名严格等于 Installer 的脚本，并且该脚本执行安装相关逻辑')">
+                        <span>
+                            <span class="card-title">使用 Installer 安装</span>
+                            <span class="card-desc">仅适用于 Installer 用户，你必须已经安装 Installer 脚本</span>
+                            <span class="card-meta">Installer 用户</span>
+                        </span>
+                    </a>
                 </div>
 
             </div>
@@ -398,11 +399,12 @@
 
         async function handleManualInstallation() {
             try {
-                const r = await fetch('Sky Quests.js');
+                const r = await fetch("Sky Quests.js", { cache: "reload" });
                 if (!r.ok) throw new Error('网络响应失败');
                 const code = await r.text();
                 await navigator.clipboard.writeText(code);
                 alert('源码已复制');
+                alert('如果未转跳，请先安装 Scriptable');
                 location.href = 'scriptable:///add';
             } catch (err) {
                 console.error(err);
