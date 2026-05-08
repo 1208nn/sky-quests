@@ -182,7 +182,7 @@
 
         /* 共享链接和按钮样式 */
         a,
-        #toggle-installs {
+        button {
             position: relative;
             display: flex;
             min-height: 88px;
@@ -198,14 +198,15 @@
         }
 
         a:hover,
-        #toggle-installs:hover {
+        button:hover {
             transform: translateY(-1px);
             border-color: var(--accent-hover);
             box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
             z-index: 50;
         }
 
-        a:active {
+        a:active,
+        button:active {
             transform: translateY(0);
         }
 
@@ -236,13 +237,13 @@
             }
 
             a,
-            #toggle-installs {
+            button {
                 background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015));
                 border-color: rgba(255, 255, 255, 0.06);
             }
 
             a:hover,
-            #toggle-installs:hover {
+            button:hover {
                 box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
             }
 
@@ -307,10 +308,6 @@
             .other-inner {
                 grid-template-columns: 1fr;
             }
-
-            #toggle-installs {
-                width: 100%;
-            }
         }
     </style>
 </head>
@@ -341,10 +338,10 @@
                     </span>
                 </a>
 
-                <button id="toggle-installs" type="button" aria-expanded="false">
+                <button type="button" onclick="handleExpandToggle(event)" aria-expanded="false">
                     <span>
                         <span class="card-title">显示其他安装方式</span>
-                        <span class="card-desc">包含 Installer、下载和源码</span>
+                        <span class="card-desc">包含 Installer、快捷指令副本和源码</span>
                     </span>
                 </button>
 
@@ -361,40 +358,57 @@
                     <a href="Install Sky Quests Script.shortcut">
                         <span>
                             <span class="card-title">快捷指令安装器</span>
-                            <span class="card-desc">通过下载文件获取</span>
+                            <span class="card-desc">通过下载文件副本获取</span>
                             <span class="card-meta">备用</span>
                         </span>
                     </a>
 
-                    <a href="Sky Quests.js">
+                    <button type="button" onclick="handleManualInstallation()">
                         <span>
                             <span class="card-title">获取源码</span>
-                            <span class="card-desc">源码下载</span>
+                            <span class="card-desc">复制源码</span>
                             <span class="card-meta">手动安装</span>
                         </span>
-                    </a>
+                    </button>
                 </div>
 
             </div>
 
-            <div class="footer">Community Project, not affiliated with thatgamecompany, thatskygame, 网易（杭州）网络有限公司
-                (NetEase (Hangzhou) Network Co., Ltd.), 那游科技服务（上海）有限公司 (Thatgamecompany China Services (Shanghai) Co.,
-                Ltd.), 上海那家回忆商贸有限公司.</div>
+            <div class="footer">
+                Community Project, not affiliated with
+                thatgamecompany,
+                thatskygame,
+                网易（杭州）网络有限公司 (NetEase (Hangzhou) Network Co., Ltd.),
+                那游科技服务（上海）有限公司 (Thatgamecompany China Services (Shanghai) Co., Ltd.),
+                上海那家回忆商贸有限公司.
+            </div>
         </section>
     </main>
     <script>
-        (function () {
-            var btn = document.getElementById('toggle-installs');
+        function handleExpandToggle(event) {
+            var btn = event.currentTarget;
             var box = document.getElementById('other-installs');
             if (!btn || !box) return;
             var title = btn.querySelector('.card-title');
-            btn.addEventListener('click', function () {
-                var open = box.classList.toggle('open');
-                box.setAttribute('aria-hidden', open ? 'false' : 'true');
-                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-                if (title) title.textContent = open ? '隐藏其他安装方式' : '显示其他安装方式';
-            });
-        })();
+            var open = box.classList.toggle('open');
+            box.setAttribute('aria-hidden', open ? 'false' : 'true');
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (title) title.textContent = open ? '隐藏其他安装方式' : '显示其他安装方式';
+        }
+
+        async function handleManualInstallation() {
+            try {
+                const r = await fetch('Sky Quests.js');
+                if (!r.ok) throw new Error('网络响应失败');
+                const code = await r.text();
+                await navigator.clipboard.writeText(code);
+                alert('源码已复制');
+                location.href = 'scriptable:///add';
+            } catch (err) {
+                console.error(err);
+                alert('失败，请稍后重试');
+            }
+        }
     </script>
 </body>
 
