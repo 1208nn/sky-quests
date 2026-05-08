@@ -66,6 +66,7 @@
             margin: 0;
             font-size: clamp(1.7rem, 3vw, 2.4rem);
             line-height: 1.15;
+            word-break: keep-all;
         }
 
         .summary {
@@ -284,7 +285,7 @@
         /* 移动端 */
         @media (max-width: 720px) {
             .panel {
-                padding: 20px;
+                padding: 15px;
                 border-radius: 18px;
             }
 
@@ -346,12 +347,11 @@
                 </button>
 
                 <div class="other-inner" id="other-installs" aria-hidden="true">
-                    <a
-                        href="https://open.scriptable.app/run/Installer?url=https%3A%2F%2Fsky-quests.shhy.in%2FSky%2520Quests.js">
+                    <a href="scriptable:///run/Installer?url=https%3A%2F%2Fsky-quests.shhy.in%2FSky%2520Quests.js">
                         <span>
                             <span class="card-title">使用 Installer 安装</span>
-                            <span class="card-desc">仅适用于 Installer 用户</span>
-                            <span class="card-meta">一键快捷安装</span>
+                            <span class="card-desc">仅适用于 Installer 用户，你必须已经安装 Installer 脚本</span>
+                            <span class="card-meta">Installer 用户</span>
                         </span>
                     </a>
 
