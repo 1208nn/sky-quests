@@ -21,7 +21,13 @@ async function getDailyQuests(lang) {
   const laDate = getLADate();
   const cache = getCache(lang);
 
-  if (cache && cache.date === laDate) return cache;
+  if (
+    cache &&
+    cache.date === laDate &&
+    Array.isArray(cache.quests) &&
+    cache.quests.length === 4
+  )
+    return cache;
 
   try {
     const res = await fetchJson(
@@ -36,7 +42,7 @@ async function getDailyQuests(lang) {
 
   const quests = await fetchFromSource(lang);
   const obj = { date: laDate, quests };
-  saveCache(lang, obj);
+  if (Array.isArray(quests) && quests.length === 4) saveCache(lang, obj);
   return obj;
 }
 

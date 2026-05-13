@@ -22,7 +22,7 @@ export default {
     const C = await e.KV.get(k);
     if (C) {
       const o = JSON.parse(C);
-      if (o.date === t)
+      if (o.date === t && Array.isArray(o.quests) && o.quests.length === 4)
         return new Response(JSON.stringify(o.quests, null, 2), {
           headers: { "Content-Type": "application/json; charset=utf-8" },
         });
@@ -44,7 +44,7 @@ export default {
     ]
       .map((m) => m[3].trim())
       .slice(0, 4);
-    e.KV.put(k, JSON.stringify({ date: t, quests: q }));
+    if (q.length === 4) e.KV.put(k, JSON.stringify({ date: t, quests: q }));
     return new Response(JSON.stringify(q, null, 2), {
       headers: { "Content-Type": "application/json; charset=utf-8" },
     });
